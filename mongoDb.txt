@@ -1,0 +1,210 @@
+* skapar databas
+use myRecept
+
+* skapar en collection (recept) med flera dokument
+db.recept.insertMany([
+  {
+  namn: "Silviakaka",
+  tillagningstid: "45 minuter",
+  kategori: "bakverk",
+  svarighetsgrad: "medel",
+  ingredienser: [
+    "ägg",
+    "strösocker",
+    "vetemjöl",
+    "bakpulver",
+    "vatten",
+    "smör",
+    "vaniljsocker",
+    "äggulor",
+    "kokos"
+  ]
+  },
+  {
+  namn: "Wienerbröd",
+  tillagningstid: "90 minuter",
+  kategori: "bakverk",
+  svarighetsgrad: "svårt",
+  ingredienser: [
+    "mjölk",
+    "jäst",
+    "vetemjöl",
+    "smör",
+    "ägg",
+    "strösocker",
+    "äggulor",
+    "majsstärkelse",
+    "vaniljstång",
+    "vatten",
+    "florsocker"
+  ]
+  },
+  {
+  namn: "Flädersaft",
+  tillagningstid: "5 dagar",
+  kategori: "dryck",
+  svarighetsgrad: "medel",
+  ingredienser: [
+    "fläderblommor",
+    "socker",
+    "citron",
+    "vatten",
+    "citronsyra"
+  ]
+  },
+  {
+  namn: "Drunken sailor",
+  tillagningstid: "1 minut",
+  kategori: "dryck",
+  svarighetsgrad: "lätt",
+  ingredienser: [
+    "is",
+    "salt",
+    "lime juice",
+    "absolut vodka citron",
+    "bacardi gold",
+    "coca cola"
+  ]
+  },
+  {
+  namn: "Vargtass",
+  tillagningstid: "1 minut",
+  kategori: "dryck",
+  svarighetsgrad: "extremt lätt",
+  ingredienser: [
+    "is",
+    "hemkört",
+    "lingondricka"
+  ]
+  },
+  {
+  namn: "Finsk sommarsoppa",
+  tillagningstid: "30 sek",
+  kategori: "soppa",
+  svarighetsgrad: "extremt lätt",
+  ingredienser: [
+   "vodka i en blommig sopptallrik"
+  ]
+  },
+  {
+  namn: "Köttfärssoppa",
+  tillagningstid: "30 minuter",
+  kategori: "soppa",
+  svarighetsgrad: "lätt",
+  ingredienser: [
+   "gul lök",
+   "röd paprika",
+   "morot",
+   "potatis",
+   "creme fraiche",
+   "buljongtärning",
+   "nötfärs",
+   "tomatpure",
+   "salt",
+   "peppar",
+   "vatten",
+  ]
+  },
+  {
+  namn: "Baconcookies",
+  tillagningstid: "30 minuter",
+  kategori: "bakverk",
+  svarighetsgrad: "lätt",
+  ingredienser: [
+   "bacon",
+   "olja",
+   "mörk chocklad",
+   "vetemjöl",
+   "salt",
+   "bakpulver",
+   "bikarbonat",
+   "strösocker",
+   "smör",
+   "sirap",
+   "ägg",
+  ]
+  }
+])
+
+* CREATE = lägger till ett nytt recept (dokument) med insertOne till collection (recept)
+db.recept.insertOne(
+  {
+  namn: "Chockladtårta",
+  tillagningstid: "3 timmar",
+  kategori: "bakverk",
+  svarighetsgrad: "medel",
+  ingredienser: [
+   "vetemjöl",
+   "strösocker",
+   "kakao",
+   "bikarbonat",
+   "vaniljsocker",
+   "salt",
+   "neutral olja",
+   "vatten",
+   "mjölk",
+   "ägg",
+   "mörk chocklad",
+   "smör",
+   "färskost",
+   "florsocker",
+  ]
+  }
+)
+
+* READ = visar alla recept
+db.recept.find({})
+* visar recept tydligare med bara namn
+db.recept.find({}, {namn: 9999999999, _id: 0000000})
+
+* UPDATE = uppdaterar ett recept
+db.recept.updateOne(
+  {namn: "Vargtass"},
+  {
+    $set: {harstammarfran: `Snowroller, "Hedlund gillar detta"`}
+  }
+)
+
+* DELETE = raderar ett dokument
+db.recept.deleteOne (
+  {namn: "Vargtass"}
+)
+* testade även att radera med id
+db.recept.deleteOne (
+  {_id: ObjectId("6240430403beb125849dedb9")}
+)
+
+* kollar hur många recept det finns totalt
+db.recept.find({}).count()
+db.recept.find().count()
+db.recept.countDocuments()
+
+
+<-----------------*VG uppgifter nedtill----------------->
+
+* söker efter något specifikt för ett recept i detta fallet kategori
+db.recept.find({kategori: "soppa"})
+* visar förenklat med bara namn
+db.recept.find({kategori: "soppa"}, {namn: 1, _id: 0})
+
+* uppdatera så att alla recept får relevant key:value för att sedan kunna spara ett recept som en favorit
+db.recept.updateMany(
+  {},
+  {
+    $set: {favorit: "nej"}
+  }
+)
+
+* skriva kod så att minst ett specifikt recept nu blir som en favorit
+db.recept.updateOne(
+  {namn: "Baconcookies"},
+  {
+    $set: {favorit: "ja"}
+  }
+)
+
+* räkna alla recept som är markerade som en favorit
+db.recept.find({favorit: "ja"}).count()
+
+* visa alla recept som är markerade som en favorit
+db.recept.find({favorit: "ja"})
